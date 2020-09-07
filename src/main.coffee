@@ -68,7 +68,6 @@ find_first_match = ( buffer, splitter, offset ) ->
   ### thx to https://github.com/maxogden/binary-split/blob/master/index.js ###
   validate.buffer d
   R             = []
-  me.collector  = null
   me.offset     = 0
   me.lastMatch  = 0
   if me.collector?
