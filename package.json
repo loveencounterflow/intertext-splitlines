@@ -22,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/loveencounterflow/intertext-splitlines/issues"
   },
-  "homepage": "https://github.com/loveencounterflow/intertext-splitlines#readme"
+  "homepage": "https://github.com/loveencounterflow/intertext-splitlines#readme",
+  "dependencies": {
+    "cnd": "^9.2.1",
+    "intertype": "^7.4.0"
+  }
 }
