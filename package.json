@@ -1,6 +1,6 @@
 {
   "name": "intertext-splitlines",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "split streaming buffers into neat, decoded lines of text",
   "main": "lib/main.js",
   "scripts": {
