@@ -23,11 +23,13 @@ warn                      = CND.get_logger 'warn',      badge
     return ( @isa.nonempty_text x.splitter ) or ( ( @isa.buffer x.splitter ) and x.length > 0 )
   ### TAINT use `encoding` for better flexibility ###
   'x.?decode is a boolean':             ( x ) -> @isa_optional.boolean x.decode
+  'x.?skip_empty_last is a boolean':    ( x ) -> @isa_optional.boolean x.skip_empty_last
 
 #-----------------------------------------------------------------------------------------------------------
 defaults =
-  splitter:     '\n'
-  decode:       true
+  splitter:         '\n'
+  decode:           true
+  skip_empty_last:  true
 
 #-----------------------------------------------------------------------------------------------------------
 @new_context = ( settings ) ->
@@ -67,7 +69,28 @@ decode = ( me, data ) ->
 #-----------------------------------------------------------------------------------------------------------
 @flush = ( me ) ->
   if me.collector?
-    yield decode me, me.collector
+    line = decode me, me.collector
+    yield line unless me.skip_empty_last and line is ''
     me.collector = null
   return null
+
+#-----------------------------------------------------------------------------------------------------------
+@splitlines = ( settings, buffers... ) ->
+  buffers = buffers.flat Infinity
+  switch type = type_of settings
+    when 'object', 'null' then null
+    when 'buffer'         then buffers.unshift settings; settings = null
+    when 'list'           then buffers.splice 0, 0, ( settings.flat Infinity )...; settings = null
+    else throw new Error "^splitlines@26258^ expected null, an object, a buffer or a list, got a #{type}"
+  ctx = @new_context settings
+  R   = []
+  for buffer in buffers
+    for line from @walk_lines ctx, buffer
+      R.push line
+  for line from @flush ctx
+    R.push line
+  return R
+
+
+
 
