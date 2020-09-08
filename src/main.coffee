@@ -44,10 +44,9 @@ decode = ( me, data ) ->
   return data.toString 'utf-8'
 
 #-----------------------------------------------------------------------------------------------------------
-@send = ( me, d ) ->
+@walk_lines = ( me, d ) ->
   ### thx to https://github.com/maxogden/binary-split/blob/master/index.js ###
   validate.buffer d
-  R             = []
   me.offset     = 0
   me.lastMatch  = 0
   if me.collector?
@@ -57,19 +56,18 @@ decode = ( me, data ) ->
   loop
     idx = d.indexOf me.splitter, me.offset - me.splitter.length + 1
     if idx >= 0 and idx < d.length
-      R.push decode me, d.slice me.lastMatch, idx
+      yield decode me, d.slice me.lastMatch, idx
       me.offset    = idx + me.splitter.length
       me.lastMatch = me.offset
     else
       me.collector  = d.slice me.lastMatch
       break
-  return R
+  return null
 
 #-----------------------------------------------------------------------------------------------------------
-@end = ( me ) ->
+@flush = ( me ) ->
   if me.collector?
-    R             = decode me, me.collector
-    me.collector  = null
-    return [ R, ]
-  return []
+    yield decode me, me.collector
+    me.collector = null
+  return null
 
