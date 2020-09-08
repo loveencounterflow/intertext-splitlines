@@ -23,7 +23,7 @@ InterText SplitLines facilitates splitting and assembling buffers into neat, dec
 ### One-Off Call
 
 In case you have one or more buffers with textual content, the simplest way to use InterText SplitLines
-is to use the `splitlines()` method which will return a list of strings, each representing one line. To
+is to use the `splitlines()` method which will return a list of strings, each representing one line:
 
 
 ```coffee
@@ -39,7 +39,7 @@ buffers = [
 buffers = ( Buffer.from d for d in buffers )
 
 
-# Now we can
+# Now that we have a number of buffers, let's split them into text lines:
 SL    = require 'intertext-splitlines'
 lines = SL.splitlines buffers
 # lines = SL.splitlines buffers... # can call with list or spread out, as seen fit
