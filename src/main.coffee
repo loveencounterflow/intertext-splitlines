@@ -44,26 +44,6 @@ decode = ( me, data ) ->
   return data.toString 'utf-8'
 
 #-----------------------------------------------------------------------------------------------------------
-find_first_match = ( buffer, splitter, offset ) ->
-  return -1 if offset >= buffer.length
-  for i in [ offset ... buffer.length ] by +1
-    if buffer[ i ] is splitter[ 0 ]
-      if splitter.length > 1
-        fullMatch = true
-        j = i
-        k = 0
-        while j < i + splitter.length
-          if buffer[ j ] isnt splitter[ k ]
-            fullMatch = false
-            break
-          j++
-          k++
-        return j - splitter.length if fullMatch
-      else
-        break
-  return i + splitter.length - 1
-
-#-----------------------------------------------------------------------------------------------------------
 @send = ( me, d ) ->
   ### thx to https://github.com/maxogden/binary-split/blob/master/index.js ###
   validate.buffer d
@@ -75,7 +55,7 @@ find_first_match = ( buffer, splitter, offset ) ->
     me.offset     = me.collector.length
     me.collector  = null
   loop
-    idx = find_first_match d, me.splitter, me.offset - me.splitter.length + 1
+    idx = d.indexOf me.splitter, me.offset - me.splitter.length + 1
     if idx >= 0 and idx < d.length
       R.push decode me, d.slice me.lastMatch, idx
       me.offset    = idx + me.splitter.length
