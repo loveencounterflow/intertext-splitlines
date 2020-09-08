@@ -7,6 +7,9 @@
 
 - [What It Does](#what-it-does)
 - [How to Use It](#how-to-use-it)
+  - [One-Off Call](#one-off-call)
+  - [Iterators](#iterators)
+  - [Settings](#settings)
 - [Revisions](#revisions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -17,9 +20,51 @@ InterText SplitLines facilitates splitting and assembling buffers into neat, dec
 
 ## How to Use It
 
-* import module as `SL = require 'intertext-splitlines'`
-* create context object as `ctx = SL.new_context settings`
-* where `settings` is an optional object with settings, see below
+### One-Off Call
+
+In case you have one or more buffers with textual content, the simplest way to use InterText SplitLines
+is to use the `splitlines()` method which will return a list of strings, each representing one line. To
+
+
+```coffee
+# For demonstration, let's assemble a number of buffers with lines
+# randomly spread all over the place:
+buffers = [
+  "helo"
+  " there!\nHere "
+  "come\na few lines\n"
+  "of text that are\nquite unevenly "
+  "spread over several\n"
+  "buffers.", ]
+buffers = ( Buffer.from d for d in buffers )
+
+
+# Now we can
+SL    = require 'intertext-splitlines'
+lines = SL.splitlines buffers
+# lines = SL.splitlines buffers... # can call with list or spread out, as seen fit
+# lines = SL.splitlines buffer_1, buffer_2, buffer_3
+
+# lines now contains:
+
+[ 'helo there!',
+  'Here come',
+  'a few lines',
+  'of text that are',
+  'quite unevenly spread over several',
+  'buffers.', ]
+```
+
+Observe that newline characters will be removed from the output so there's no way to determine whether
+the last line did or did not end with a newline; this should be the desired result most of the time. In
+the event that a trailing newline should be detectable, pass in an explicit setting:
+
+```coffee
+lines = SL.splitlines { skip_empty_last: false, }, buffers
+```
+
+### Iterators
+
 * whenever you receive a buffer from a stream or other source (such as a NodeJS stream's `data` event),
   call `SL.walk_lines ctx, buffer` with that data; this returns an iterator over the decoded complete lines
   in the buffer, if any
@@ -48,14 +93,26 @@ for line from SL.flush ctx
   do_something_with line
 ```
 
+### Settings
+
+* **`?splitter <nonempty ( text | buffer )> = '\n'`**—the sequence of characters that mark linebreaks
+* **`?decode <boolean> = true`**—whether or not to decode buffers as UTF-8. NOTE to be replaced by
+  `encoding`.
+* **`?skip_empty_last <boolean> = true`**—whether to emit an emtpy string as last item when the source ended
+  in `splitter`.
+
+
 ## Revisions
 
 * [X] throw out `find_first_match()`, replace by `buffer.indexOf()`
 * [X] do not return lists but iterators
-* [X] publish v1.0.0
-
-
-
+* publish v1.0.0
+---------------------------------------------------------------------
+* [X] implement `splitlines()`
+* [X] implement setting `skip_empty_last`
+* publish v1.1.0
+---------------------------------------------------------------------
+* [ ] implement `encoding`
 
 
 
