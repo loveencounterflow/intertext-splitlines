@@ -111,9 +111,14 @@ for line from SL.flush ctx
 * [X] implement `splitlines()`
 * [X] implement setting `skip_empty_last`
 * publish v1.1.0
+
+* [X] fix treatment of last line when emitting buffers
+* publish v1.1.1
 ---------------------------------------------------------------------
 * [ ] implement `encoding`
-
+* [ ] make keeping of newlines configurable
+* [ ] make sure all relevant line ending conventions are properly honored
+* [ ] allow custom line splitter
 
 
 
