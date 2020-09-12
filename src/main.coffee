@@ -70,7 +70,7 @@ decode = ( me, data ) ->
 @flush = ( me ) ->
   if me.collector?
     line = decode me, me.collector
-    yield line unless me.skip_empty_last and line is ''
+    yield line unless me.skip_empty_last and line.length is 0
     me.collector = null
   return null
 
