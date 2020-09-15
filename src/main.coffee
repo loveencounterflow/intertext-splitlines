@@ -24,12 +24,14 @@ warn                      = CND.get_logger 'warn',      badge
   ### TAINT use `encoding` for better flexibility ###
   'x.?decode is a boolean':             ( x ) -> @isa_optional.boolean x.decode
   'x.?skip_empty_last is a boolean':    ( x ) -> @isa_optional.boolean x.skip_empty_last
+  'x.?keep_newlines is a boolean':      ( x ) -> @isa_optional.boolean x.keep_newlines
 
 #-----------------------------------------------------------------------------------------------------------
 defaults =
   splitter:         '\n'
   decode:           true
   skip_empty_last:  true
+  keep_newlines:    false
 
 #-----------------------------------------------------------------------------------------------------------
 @new_context = ( settings ) ->
@@ -51,6 +53,7 @@ decode = ( me, data ) ->
   validate.buffer d
   me.offset     = 0
   me.lastMatch  = 0
+  delta         = if me.keep_newlines then me.splitter.length else 0
   if me.collector?
     d             = Buffer.concat [ me.collector, d, ]
     me.offset     = me.collector.length
@@ -58,7 +61,7 @@ decode = ( me, data ) ->
   loop
     idx = d.indexOf me.splitter, me.offset - me.splitter.length + 1
     if idx >= 0 and idx < d.length
-      yield decode me, d.slice me.lastMatch, idx
+      yield decode me, d.slice me.lastMatch, idx + delta
       me.offset    = idx + me.splitter.length
       me.lastMatch = me.offset
     else
