@@ -100,7 +100,10 @@ for line from SL.flush ctx
   `encoding`.
 * **`?skip_empty_last <boolean> = true`**—whether to emit an emtpy string as last item when the source ended
   in `splitter`.
-
+* **`?keep_newlines <boolean> = false`**—whether to return strings or buffers that end in whatever
+  `splitter` is set to. That is `abc/def` with settings `{ splitter: '/', keep_newlines: false, }` would
+  split into `[ 'abc', 'def', ]`, wheras with `{ keep_newlines: true, }`, the result would be `[ 'abc/',
+  'def', ]`
 
 ## Revisions
 
@@ -114,6 +117,9 @@ for line from SL.flush ctx
 
 * [X] fix treatment of last line when emitting buffers
 * publish v1.1.1
+---------------------------------------------------------------------
+* [X] implement setting `keep_newlines`
+* publish v1.2.0
 ---------------------------------------------------------------------
 * [ ] implement `encoding`
 * [ ] make keeping of newlines configurable
