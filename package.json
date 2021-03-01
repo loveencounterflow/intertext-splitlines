@@ -25,6 +25,6 @@
   "homepage": "https://github.com/loveencounterflow/intertext-splitlines#readme",
   "dependencies": {
     "cnd": "^9.2.1",
-    "intertype": "^7.4.0"
+    "intertype": "7.6.5"
   }
 }
